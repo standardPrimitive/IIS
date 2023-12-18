@@ -1,5 +1,5 @@
-#ifndef HTTPWEBSERVER_H
-#define HTTPWEBSERVER_H
+#ifndef TRIP_HTTP_WEB_SERVER_H
+#define TRIP_HTTP_WEB_SERVER_H
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"

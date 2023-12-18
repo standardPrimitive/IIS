@@ -1,5 +1,5 @@
-#ifndef HTTPREQUESTFACTORY_H
-#define HTTPREQUESTFACTORY_H
+#ifndef TRIP_HTTPREQUESTFACTORY_H
+#define TRIP_HTTPREQUESTFACTORY_H
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"

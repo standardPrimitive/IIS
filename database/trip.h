@@ -1,5 +1,5 @@
-#ifndef AUTHOR_H
-#define AUTHOR_H
+#ifndef TRIP_H
+#define TRIP_H
 
 #include <string>
 #include <vector>

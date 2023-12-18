@@ -1,5 +1,5 @@
-#ifndef USEHANDLER_H
-#define USEHANDLER_H
+#ifndef TRIP_HANDLER_H
+#define TRIP_HANDLER_H
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"
