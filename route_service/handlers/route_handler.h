@@ -61,11 +61,11 @@ static bool hasSubstr(const std::string &str, const std::string &substr)
     return false;
 }
 
-class OrderHandler : public HTTPRequestHandler
+class RouteHandler : public HTTPRequestHandler
 {
 
 public:
-    OrderHandler(const std::string &format) : _format(format)
+    RouteHandler(const std::string &format) : _format(format)
     {
     }
 
@@ -77,11 +77,11 @@ public:
         {
             if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
             {
-                if (form.has("id_order") && form.has("id_user"))
+                if (form.has("id_route") && form.has("id_user"))
                 {
-                    database::Route order;
-                    order.id_route() = stol(form.get("id_route"));
-                    order.id_user() = stol(form.get("id_user"));
+                    database::Route route;
+                    route.id_route() = stol(form.get("id_route"));
+                    route.id_user() = stol(form.get("id_user"));
 
                     bool check_result = true;
                     std::string message;
@@ -89,12 +89,12 @@ public:
 
                     if (check_result)
                     {
-                        database::Route::add_route(order);
+                        database::Route::add_route(route);
                         response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
                         response.setChunkedTransferEncoding(true);
                         response.setContentType("application/json");
                         std::ostream &ostr = response.send();
-                        ostr << order.get_id_route();
+                        ostr << route.get_id_route();
                         return;
                     }
 
@@ -121,7 +121,7 @@ public:
         root->set("title", "Internal exception");
         root->set("status", Poco::Net::HTTPResponse::HTTPStatus::HTTP_NOT_FOUND);
         root->set("detail", "request ot found");
-        root->set("instance", "/order");
+        root->set("instance", "/route");
         std::ostream &ostr = response.send();
         Poco::JSON::Stringifier::stringify(root, ostr);
     }

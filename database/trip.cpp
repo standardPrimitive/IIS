@@ -1,4 +1,5 @@
 #include "trip.h"
+#include "user.h"
 #include "database.h"
 #include "../config/config.h"
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include "Poco/JSON/Object.h"
 #include <optional>
+#include "user.h"
 
 namespace database
 {
@@ -19,11 +20,11 @@ namespace database
             static Route fromJSON(const std::string &str);
 
             long                 get_id_route() const;
-            long                 get_id_user() const;
+            const long          &get_id_user() const;
             const std::string   &get_point_start() const;
             const std::string   &get_point_end() const;
 
-            long&         id_route();
+            long         &id_route();
             long         &id_user();
             std::string  &point_start();
             std::string  &point_end();
@@ -31,8 +32,10 @@ namespace database
             static void init();
             static void add_route(Route Route); //добавление маршрута
             static void remove_route(Route Route); //удаление маршрута
+            void save_to_mysql();
 
             Poco::JSON::Object::Ptr toJSON() const;
+            static Poco::JSON::Array::Ptr vectorToJSON(std::vector<Route>& routes);
     };
 }
 

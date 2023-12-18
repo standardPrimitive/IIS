@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(hl_server C CXX)
+project(IIS C CXX)
 
-SET (EXAMPLE_BINARY "hl_mai_lab_01")
+SET (USER_SERVICE "user_service")
 SET (TRIP_SERVICE "trip_service")
 SET (ROUTE_SERVICE "route_service")
 
@@ -24,9 +24,7 @@ link_directories("/usr/local/lib")
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(${EXAMPLE_BINARY} main.cpp
-                                 route_main.cpp
-                                 trip_main.cpp
+add_executable(${USER_SERVICE} main.cpp
                                  config/config.cpp 
                                  database/database.cpp
                                  database/route.cpp
@@ -34,12 +32,12 @@ add_executable(${EXAMPLE_BINARY} main.cpp
                                  database/user.cpp)
 
 
-target_include_directories(${EXAMPLE_BINARY} PRIVATE "${CMAKE_BINARY_DIR}")
-target_compile_options(${EXAMPLE_BINARY} PRIVATE -Wall -Wextra -pedantic -Werror )
-set_target_properties(${EXAMPLE_BINARY} PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(${EXAMPLE_BINARY} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_include_directories(${USER_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
+target_compile_options(${USER_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
+set_target_properties(${USER_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${USER_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(${EXAMPLE_BINARY} PRIVATE 
+target_link_libraries(${USER_SERVICE} PRIVATE 
                              ${CMAKE_THREAD_LIBS_INIT} 
                              ${Poco_LIBRARIES}
                              "PocoData"
@@ -50,7 +48,12 @@ target_link_libraries(${EXAMPLE_BINARY} PRIVATE
 
 
 
-add_executable(${TRIP_SERVICE} trip_main.cpp)
+add_executable(${TRIP_SERVICE} trip_main.cpp
+config/config.cpp 
+database/database.cpp
+database/route.cpp
+database/trip.cpp
+database/user.cpp)
 target_include_directories(${TRIP_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
 target_compile_options(${TRIP_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
 set_target_properties(${TRIP_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
@@ -65,7 +68,12 @@ target_link_libraries(${TRIP_SERVICE} PRIVATE
                              ZLIB::ZLIB)
 
 
-add_executable(${ROUTE_SERVICE} route_main.cpp)
+add_executable(${ROUTE_SERVICE} route_main.cpp
+config/config.cpp 
+database/database.cpp
+database/route.cpp
+database/trip.cpp
+database/user.cpp)
 target_include_directories(${ROUTE_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
 target_compile_options(${ROUTE_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
 set_target_properties(${ROUTE_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)

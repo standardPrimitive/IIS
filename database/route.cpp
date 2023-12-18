@@ -1,4 +1,5 @@
 #include "route.h"
+#include "user.h"
 #include "database.h"
 #include "../config/config.h"
 
@@ -105,6 +106,59 @@ namespace database
         }
     }
 
+
+    void Route::save_to_mysql()
+    {
+
+        try
+        {
+            Poco::Data::Session session = database::Database::get().create_session();
+            Poco::Data::Statement insert(session);
+
+            insert << "INSERT INTO Route (id_route, id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
+                use(_id_route),
+                use(_id_user),
+                use(_point_start),
+                use(_point_end),
+
+            insert.execute();
+
+            Poco::Data::Statement select(session);
+            select << "SELECT LAST_INSERT_ID()",
+                into(_id_route),
+                range(0, 1); //  iterate over result set one row at a time
+
+            if (!select.done())
+            {
+                select.execute();
+            }
+            std::cout << "inserted:" << _id_route << std::endl;
+        }
+        catch (Poco::Data::MySQL::ConnectionException &e)
+        {
+            std::cout << "connection:" << e.what() << std::endl;
+            throw;
+        }
+        catch (Poco::Data::MySQL::StatementException &e)
+        {
+
+            std::cout << "statement:" << e.what() << std::endl;
+            throw;
+        }
+    }
+
+    Poco::JSON::Array::Ptr Route::vectorToJSON(std::vector<Route>& routes)
+    {
+        Poco::JSON::Array::Ptr json_lecture_array = new Poco::JSON::Array();
+
+        for (const auto& route : routes) {
+            json_lecture_array->add(
+                Poco::Dynamic::Var(route.toJSON())
+            );
+        }
+
+        return json_lecture_array;
+    }
     void Route::remove_route(Route Route) // удалить маршрут пользователя
     {
         try
@@ -145,7 +199,7 @@ namespace database
         return _id_route;
     }
 
-    long Route::get_id_user() const
+    const long &Route::get_id_user() const
     {
         return _id_user;
     }

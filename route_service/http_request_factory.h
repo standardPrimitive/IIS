@@ -58,7 +58,7 @@ public:
             hasSubstr(request.getURI(),"/read_all") ||
             hasSubstr(request.getURI(),"/search") ||
             hasSubstr(request.getURI(),"/product")) 
-            return new OrderHandler(_format);
+            return new RouteHandler(_format);
         return 0;
     }
 

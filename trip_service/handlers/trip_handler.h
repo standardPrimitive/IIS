@@ -75,9 +75,10 @@ public:
         HTMLForm form(request, request.stream());
         try
         {
-            if (form.has("id") && hasSubstr(request.getURI(), "/read_by_id"))
+
+            if (form.has("trip_id") && hasSubstr(request.getURI(), "/read_by_id"))
             {
-                long id = atol(form.get("id").c_str());
+                long id = atol(form.get("trip_id").c_str());
                 std::optional<database::Trip> result = database::Trip::read_by_id(id);
                 if (result)
                 {
