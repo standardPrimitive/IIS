@@ -262,6 +262,16 @@ namespace database
         return _user;
     }
 
+    const std::string &Trip::get_date_depart() const
+    {
+        return _date_depart;
+    }
+
+    const std::string &Trip::get_travel_conditions() const
+    {
+        return _travel_conditions;
+    }
+
     const int &Trip::get_price() const
     {
         return _price;

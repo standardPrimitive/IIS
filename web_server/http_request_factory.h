@@ -39,8 +39,8 @@ using Poco::Util::OptionCallback;
 using Poco::Util::HelpFormatter;
 
 #include "handlers/user_handler.h"
-#include "handlers/trip_handler.h"
-#include "handlers/route_handler.h"
+// #include "handlers/trip_handler.h"
+// #include "handlers/route_handler.h"
 
 
 class HTTPRequestFactory: public HTTPRequestHandlerFactory

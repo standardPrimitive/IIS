@@ -20,7 +20,6 @@ namespace database
 
             long                 get_id_route() const;
             long                 get_id_user() const;
-            const std::string   &get_login() const;
             const std::string   &get_point_start() const;
             const std::string   &get_point_end() const;
 

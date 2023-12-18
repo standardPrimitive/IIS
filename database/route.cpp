@@ -145,6 +145,21 @@ namespace database
         return _id_route;
     }
 
+    long Route::get_id_user() const
+    {
+        return _id_user;
+    }
+
+    const std::string &Route::get_point_start() const
+    {
+        return _point_start;
+    }
+
+    const std::string &Route::get_point_end() const
+    {
+        return _point_end;
+    }
+
     std::string &Route::point_start()
     {
         return _point_start;

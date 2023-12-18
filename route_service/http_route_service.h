@@ -40,14 +40,14 @@ using Poco::Util::ServerApplication;
 #include "http_request_factory.h"
 #include "../database/route.h"
 
-class HTTPWebServer : public Poco::Util::ServerApplication
+class HTTPRouteWebServer : public Poco::Util::ServerApplication
 {
 public:
-    HTTPWebServer() : _helpRequested(false)
+    HTTPRouteWebServer() : _helpRequested(false)
     {
     }
 
-    ~HTTPWebServer()
+    ~HTTPRouteWebServer()
     {
     }
 

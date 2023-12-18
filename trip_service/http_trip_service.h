@@ -40,14 +40,14 @@ using Poco::Util::ServerApplication;
 #include "http_request_factory.h"
 #include "../database/trip.h"
 
-class HTTPWebServer : public Poco::Util::ServerApplication
+class HTTPTripWebServer : public Poco::Util::ServerApplication
 {
 public:
-    HTTPWebServer() : _helpRequested(false)
+    HTTPTripWebServer() : _helpRequested(false)
     {
     }
 
-    ~HTTPWebServer()
+    ~HTTPTripWebServer()
     {
     }
 

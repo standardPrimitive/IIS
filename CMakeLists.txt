@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.2)
 project(hl_server C CXX)
 
 SET (EXAMPLE_BINARY "hl_mai_lab_01")
-SET (OTHER_SERVICE "other_service")
+SET (TRIP_SERVICE "trip_service")
+SET (ROUTE_SERVICE "route_service")
 
 find_package(OpenSSL)
 find_package(Threads)
@@ -23,7 +24,9 @@ link_directories("/usr/local/lib")
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(${EXAMPLE_BINARY} main.cpp 
+add_executable(${EXAMPLE_BINARY} main.cpp
+                                 route_main.cpp
+                                 trip_main.cpp
                                  config/config.cpp 
                                  database/database.cpp
                                  database/route.cpp
@@ -47,16 +50,31 @@ target_link_libraries(${EXAMPLE_BINARY} PRIVATE
 
 
 
-add_executable(${OTHER_SERVICE} other_main.cpp)
-target_include_directories(${OTHER_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
-target_compile_options(${OTHER_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
-set_target_properties(${OTHER_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(${OTHER_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+add_executable(${TRIP_SERVICE} trip_main.cpp)
+target_include_directories(${TRIP_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
+target_compile_options(${TRIP_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
+set_target_properties(${TRIP_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${TRIP_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(${OTHER_SERVICE} PRIVATE 
+target_link_libraries(${TRIP_SERVICE} PRIVATE 
                              ${CMAKE_THREAD_LIBS_INIT} 
                              ${Poco_LIBRARIES}
                              "PocoData"
                              "PocoDataMySQL"
                              "mysqlclient"
                              ZLIB::ZLIB)
+
+
+add_executable(${ROUTE_SERVICE} route_main.cpp)
+target_include_directories(${ROUTE_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
+target_compile_options(${ROUTE_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
+set_target_properties(${ROUTE_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${ROUTE_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+
+target_link_libraries(${ROUTE_SERVICE} PRIVATE 
+                            ${CMAKE_THREAD_LIBS_INIT} 
+                            ${Poco_LIBRARIES}
+                            "PocoData"
+                            "PocoDataMySQL"
+                            "mysqlclient"
+                            ZLIB::ZLIB)
