@@ -17,16 +17,19 @@ CREATE TABLE IF NOT EXISTS `Route` (
     `id_user` INT(11) NOT NULL,
     `point_start` VARCHAR(256) NOT NULL,
     `point_end` VARCHAR(256) NOT NULL,
-    PRIMARY KEY (`id_route`));
+    PRIMARY KEY (`id_route`),
+    FOREIGN KEY (`id_user`) REFERENCES `User` (`id`));
 
 CREATE TABLE IF NOT EXISTS `Trip` (`id` INT NOT NULL AUTO_INCREMENT,
-    `route_ID` VARCHAR(256) NOT NULL,
+    `route_ID` INT(11) NOT NULL,
     `driver` int(11) NOT NULL,
     `user` int(11) NOT NULL,
     `date_depart` VARCHAR(256) NOT NULL,
     `travel_conditions` VARCHAR(256) NULL,
     `price` int(5) NOT NULL,
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user`) REFERENCES `User` (`id`),
+    FOREIGN KEY (`route_ID`) REFERENCES `Route` (`id_route`));  
 
 INSERT INTO `User` (`first_name`, `last_name`, `email`, `phone`, `login`, `password`) VALUES
     ('John', 'Doe', 'john.doe@email.com', '123-456-7890', 'johndoe', 'password123'),

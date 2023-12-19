@@ -77,10 +77,9 @@ public:
         {
             if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
             {
-                if (form.has("id_route") && form.has("id_user"))
+                if (form.has("id_user") && (hasSubstr(request.getURI(), "/route")))
                 {
                     database::Route route;
-                    route.id_route() = stol(form.get("id_route"));
                     route.id_user() = stol(form.get("id_user"));
 
                     bool check_result = true;

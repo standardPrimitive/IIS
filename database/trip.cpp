@@ -29,13 +29,15 @@ namespace database
             Statement create_stmt(session);
             //+bdv
             create_stmt << "CREATE TABLE IF NOT EXISTS `Trip` (`id` INT NOT NULL AUTO_INCREMENT,"
-                        << "`route_ID` VARCHAR(256) NOT NULL,"
+                        << "`route_ID` int(11) NOT NULL,"
                         << "`driver` int(11) NOT NULL,"
                         << "`user` int(11) NOT NULL,"
                         << "`date_depart` VARCHAR(256) NOT NULL,"
                         << "`travel_conditions` VARCHAR(256) NULL,"
                         << "`price` int(5) NOT NULL,"
-                        << "PRIMARY KEY (`id`));",
+                        << "PRIMARY KEY (`id`),"
+                        << "FOREIGN KEY (`user`) REFERENCES `User` (`id`),"
+                        << "FOREIGN KEY (`route_ID`) REFERENCES `Route` (`id_route`));",  
             //-bdv
                 now;
 

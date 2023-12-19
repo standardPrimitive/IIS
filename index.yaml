@@ -1,48 +1,14 @@
 openapi: '3.0.0'
 info:
   version: '1.0.0'
-  title: 'Arch Lab Example API'
-  description: Пример API для первого домашнего задания по курсу Архитектура программных систем
+  title: 'Arch Lab №2 Example API'
+  description: API для сервиса поездок с попутчиками 
 servers:
   - url: http://localhost:8080
     description: Example server
 paths:
-  /search:
-    get:
-      summary: Поиск пользователей по маске имени и фамилии
-      parameters:
-      - name: first_name
-        description: Имя
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: last_name
-        description: Фамилия
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: The users for the provided masks
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/users'
-        404:
-          description: No user found for the provided mask
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        500:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /auth:
+# =========================================================================== # 
+  /auth: # проверка авторизации
     get:
       summary: Проверка аутентификации
       responses:
@@ -58,7 +24,8 @@ paths:
             application/json:
               schema:
                 type: string
-  /user:
+  # =========================================================================== # 
+  /user: # поиск по айди
     get:
       summary: Чтение информации о пользователе
       parameters:
@@ -145,15 +112,207 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  # =========================================================================== # 
+  /user/search/fio: # поиск по фио
+    get:
+      servers:
+        - url: http://localhost:8080
+      summary: Поиск пользователей по маске имени и фамилии
+      parameters:
+      - name: first_name
+        description: Имя
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: last_name
+        description: Фамилия
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: The users for the provided masks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        404:
+          description: No user found for the provided mask
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  # =========================================================================== # 
+  /user/search/login: # поиск по логину
+    get:
+      servers:
+        - url: http://localhost:8080
+      summary: Поиск пользователя по логину
+      parameters:
+      - name: login
+        description: Логин
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Пользователь с соответствующим логином
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        404:
+          description: Пользователь с таким логином не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Непредвиденная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+  # ================================= ROUTE ========================================== # 
+  /route: # получение информации о маршруте
+    get:
+      servers:
+        - url: http://localhost:8081
+      summary: Информации о маршруте
+      parameters:
+      - name: id_route
+        description: Идентификатор маршрута
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/route_ID'
+      responses:
+        200:
+          description: Найденный маршрут
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trip'
+        404:
+          description: Маршрут не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Добавление нового маршрута # п.4 Создание маршрута
+      parameters:
+      - name: route_ID
+        description: Идентификатор маршрута
+        in: query
+        required: true
+        schema:
+            $ref: '#/components/schemas/route_ID'
+      - name: user_id
+        description: Идентификатор пользователя 
+        in: query
+        required: true
+        schema:
+            $ref: '#/components/schemas/user_id'
+      - name: point_start
+        description: Город отправления 
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: point_end
+        description: Город прибытия 
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Идентификатор добавленного маршрута
+          content:
+            application/json:
+              schema:
+                type: integer
+        404:
+          description: Ошибка добавления маршрута
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /routes/search_by_user: # получение маршрутов пользователя
+    parameters:
+    - name: user_id
+      description: Идентификатор пользователя
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/user_id'
+    get:
+      servers:
+        - url: http://localhost:8081
+      summary: Получение маршрутов пользователя
+      responses:
+        200:
+          description: Список маршрутов конкретного пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trips'
+        404:
+          description: Указанный пользователь не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+# ============================= COMPONENTS SCHEMAS ============================
 components:
   schemas:
     user_id:
       description: Уникальный идентификатор пользователя
       type: integer
+    route_ID:
+      description: Уникальный идентификатор маршрута
+      type: integer
+    trip_id:
+      description: Уникальный идентификатор поездки
+      type: integer
     users:
       type: array
       items:
         $ref: '#/components/schemas/user'
+    trips:
+      type: array
+      items:
+        $ref: '#/components/schemas/trip'
     user:
       type: object
       required:
@@ -178,6 +337,53 @@ components:
         login:
           type: string
         password:
+          type: string
+# ===================================== trip object ============================== #
+    trip:
+      type: object
+      required:
+        - route_ID
+        - driver
+        - user
+        - date_depart
+        - travel_conditions
+        - price
+      properties:
+        route_ID:
+          $ref: '#/components/schemas/route_ID'
+        driver:
+          $ref: '#/components/schemas/user_id'
+        user:
+          $ref: '#/components/schemas/user_id'
+        date_depart:
+          type: string
+          description: Дата отправки
+        travel_conditions:
+          type: string
+          description: Пожелания по поездке
+        price:
+          type: integer
+          description: Стоимость поездки
+# ===================================== route object ============================== #
+    route:
+      type: object
+      required:
+        - id_route
+        - id_user
+        - point_start
+        - point_end
+      properties:
+        id_route:
+          $ref: '#/components/schemas/route_ID'
+        id_user:
+          $ref: '#/components/schemas/user_id'
+        point_start:
+          type: string
+          description: Город отправления
+        description:
+          type: string
+          description: Город прибытия
+        format:
           type: string
     Error:
       type: object

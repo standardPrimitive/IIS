@@ -30,7 +30,8 @@ namespace database
                         << "`id_user` INT(11) NOT NULL,"
                         << "`point_start` VARCHAR(256) NOT NULL,"
                         << "`point_end` VARCHAR(256) NOT NULL,"
-                        << "PRIMARY KEY (`id_route`));",
+                        << "PRIMARY KEY (`id_route`),"
+                        << "FOREIGN KEY (`id_user`) REFERENCES `User` (`id`));", 
                 now;
         }
 
@@ -76,8 +77,7 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
             //+bdv
-            insert << "INSERT INTO Route (id_route, id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
-                use(Route._id_route),
+            insert << "INSERT INTO Route (id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
                 use(Route._id_user),
                 use(Route._point_start),
                 use(Route._point_end);
@@ -115,8 +115,8 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
 
-            insert << "INSERT INTO Route (id_route, id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
-                use(_id_route),
+            insert << "INSERT INTO Route (id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
+               // use(_id_route),
                 use(_id_user),
                 use(_point_start),
                 use(_point_end),
