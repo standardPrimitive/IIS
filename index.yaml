@@ -173,7 +173,7 @@ components:
           type: string
         email:
           type: string
-        title:
+        phone:
           type: string
         login:
           type: string

@@ -33,7 +33,7 @@ namespace database
                         << "`driver` int(11) NOT NULL,"
                         << "`user` int(11) NOT NULL,"
                         << "`date_depart` VARCHAR(256) NOT NULL,"
-                        << "`travel_conditions` VARCHAR(256) NOT NULL,"
+                        << "`travel_conditions` VARCHAR(256) NULL,"
                         << "`price` int(5) NOT NULL,"
                         << "PRIMARY KEY (`id`));",
             //-bdv

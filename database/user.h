@@ -18,6 +18,7 @@ namespace database
             std::string _password;
             //+bdv
             std::string _phone;
+            std::string _status;
             //-bdv
         public:
 
@@ -31,6 +32,7 @@ namespace database
             const std::string &get_password() const;
             //+bdv
             const std::string &get_phone() const;
+            //const std::string &get_status() const;
             //-bdv
            
             long&              id();
@@ -41,6 +43,7 @@ namespace database
             std::string       &password();
             //+bdv
             std::string       &phone();
+            //std::string       &status();
             //-bdv
 
             static void init();

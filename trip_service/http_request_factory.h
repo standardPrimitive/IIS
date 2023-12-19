@@ -41,10 +41,10 @@ using Poco::Util::HelpFormatter;
 #include "handlers/trip_handler.h"
 
 
-class HTTPRequestFactory: public HTTPRequestHandlerFactory
+class HTTPTripRequestFactory: public HTTPRequestHandlerFactory
 {
 public:
-    HTTPRequestFactory(const std::string& format):
+    HTTPTripRequestFactory(const std::string& format):
         _format(format)
     {
     }

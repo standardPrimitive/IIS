@@ -17,6 +17,7 @@ namespace database
             std::string _date_depart;
             std::string _travel_conditions;
             int _price;
+            
 
         public:
             static Trip fromJSON(const std::string & str);

@@ -41,10 +41,10 @@ using Poco::Util::HelpFormatter;
 #include "handlers/route_handler.h"
 
 
-class HTTPRequestFactory: public HTTPRequestHandlerFactory
+class HTTPRouteRequestFactory: public HTTPRequestHandlerFactory
 {
 public:
-    HTTPRequestFactory(const std::string& format):
+    HTTPRouteRequestFactory(const std::string& format):
         _format(format)
     {
     }

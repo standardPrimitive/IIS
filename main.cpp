@@ -3,6 +3,6 @@
 
 int main(int argc, char*argv[]) 
 {
-    HTTPWebServer app;
+    HTTPUserWebServer app;
     return app.run(argc, argv);
 }

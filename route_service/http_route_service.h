@@ -69,7 +69,7 @@ protected:
         {
             database::Route::init();
             ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", 8083));
-            HTTPServer srv(new HTTPRequestFactory(DateTimeFormat::SORTABLE_FORMAT), svs, new HTTPServerParams);
+            HTTPServer srv(new HTTPRouteRequestFactory(DateTimeFormat::SORTABLE_FORMAT), svs, new HTTPServerParams);
             srv.start();
             waitForTerminationRequest();
             srv.stop();

@@ -31,11 +31,14 @@ namespace database
                         << "`last_name` VARCHAR(256) NOT NULL,"
                         << "`login` VARCHAR(256) NOT NULL,"
                         << "`password` VARCHAR(256) NOT NULL,"
-                        << "`email` VARCHAR(256) NULL,"
+                        << "`email` VARCHAR(256) NOT NULL,"
                         //bdv
                         << "`phone` VARCHAR(256) NOT NULL,"
+                        //<< "`status` VARCHAR(256) NOT NULL,"
                         //bdv
-                        << "PRIMARY KEY (`id`),KEY `fn` (`first_name`),KEY `ln` (`last_name`));",
+                        << "PRIMARY KEY (`id`),KEY `fn` (`first_name`),KEY `ln` (`last_name`),"
+                        << "UNIQUE KEY `unique_email` (`email`),"
+                        << "UNIQUE KEY `unique_phone` (`phone`));",
                 now;
         }
 
@@ -64,6 +67,7 @@ namespace database
         root->set("password", _password);
         //bdv
         root->set("phone", _phone);
+        //root->set("status", _status);
         //bdv
         return root;
     }
@@ -83,6 +87,7 @@ namespace database
         user.password() = object->getValue<std::string>("password");
         //bdv
         user.phone() = object->getValue<std::string>("phone");
+        //user.status() = object->getValue<std::string>("status");
         //bdv
         return user;
     }
@@ -132,6 +137,7 @@ namespace database
                 into(a._password),
                 //bdv
                 into(a._phone),
+                //into(a._status),
                 //bdv
                 use(id),
                 range(0, 1); //  iterate over result set one row at a time
@@ -171,6 +177,7 @@ namespace database
                 into(a._password),
                 //bdv
                 into(a._phone),
+               //into(a._status),
                 //bdv
                 range(0, 1); //  iterate over result set one row at a time
 
@@ -214,6 +221,7 @@ namespace database
                 into(a._password),
                 //bdv
                 into(a._phone),
+                //into(a._status),
                 //bdv
                 use(first_name),
                 use(last_name),
@@ -256,6 +264,7 @@ namespace database
                 use(_password);
                 //bdv
                 use(_phone);
+                //use(_status);
                 //bdv
 
             insert.execute();
@@ -349,9 +358,18 @@ namespace database
         return _phone;
     }
 
+    // std::string &User::status()
+    // {
+    //     return _status;
+    // }
+
     const std::string &User::get_phone() const
     {
         return _phone;
     }
 
+    // const std::string &User::get_status() const
+    // {
+    //     return _status;
+    // }
 }
