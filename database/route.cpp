@@ -105,8 +105,45 @@ namespace database
             throw;
         }
     }
+    std::vector<Route> Route::read_by_user_id(long _id_user)
+    {
+        try
+        {
+            Poco::Data::Session session = database::Database::get().create_session();
+            Statement select(session);
+            std::vector<Route> result;
+            Route route;
+            select << "SELECT id_user, id_route, point_start, point_end FROM Route WHERE id_user=?",
+                into(route._id_user),
+                into(route._id_route),
+                into(route._point_start),
+                into(route._point_end),
+                use(_id_user),
+                range(0, 1); //  iterate over result set one row at a time
 
+            // select.execute();
+            // Poco::Data::RecordSet rs(select);
+            // //if (rs.moveFirst()) return route;
+             while (!select.done())
+            {
+                if (select.execute())
+                    result.push_back(route);
+            }
+            return result;
+        }
 
+        catch (Poco::Data::MySQL::ConnectionException &e)
+        {
+            std::cout << "connection:" << e.what() << std::endl;
+        }
+        catch (Poco::Data::MySQL::StatementException &e)
+        {
+
+            std::cout << "statement:" << e.what() << std::endl;
+            
+        }
+        return {};
+    }
     void Route::save_to_mysql()
     {
 
@@ -115,8 +152,7 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
 
-            insert << "INSERT INTO Route (id_user, point_start, point_end) VALUES(?, ?, ?, ?)",
-               // use(_id_route),
+            insert << "INSERT INTO Route (id_user, point_start, point_end) VALUES(?, ?, ?)",
                 use(_id_user),
                 use(_point_start),
                 use(_point_end),
@@ -132,7 +168,7 @@ namespace database
             {
                 select.execute();
             }
-            std::cout << "inserted:" << _id_route << std::endl;
+            std::cout << "inserted succesfully" << std::endl;
         }
         catch (Poco::Data::MySQL::ConnectionException &e)
         {
@@ -149,16 +185,17 @@ namespace database
 
     Poco::JSON::Array::Ptr Route::vectorToJSON(std::vector<Route>& routes)
     {
-        Poco::JSON::Array::Ptr json_lecture_array = new Poco::JSON::Array();
+        Poco::JSON::Array::Ptr json_routes_array = new Poco::JSON::Array();
 
-        for (const auto& route : routes) {
-            json_lecture_array->add(
-                Poco::Dynamic::Var(route.toJSON())
+        for (const auto& lecture : routes) {
+            json_routes_array->add(
+                Poco::Dynamic::Var(lecture.toJSON())
             );
         }
 
-        return json_lecture_array;
+        return json_routes_array;
     }
+
     void Route::remove_route(Route Route) // удалить маршрут пользователя
     {
         try

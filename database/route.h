@@ -31,7 +31,8 @@ namespace database
 
             static void init();
             static void add_route(Route Route); //добавление маршрута
-            static void remove_route(Route Route); //удаление маршрута
+            static std::vector<Route> read_by_user_id(long _id_user);
+            static void remove_route(Route Route); // удаление маршрута
             void save_to_mysql();
 
             Poco::JSON::Object::Ptr toJSON() const;

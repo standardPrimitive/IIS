@@ -287,6 +287,38 @@ namespace database
         }
     }
 
+  bool User::check_user_exists_by_id(long id)
+    {
+        try
+        {
+            Poco::Data::Session session = database::Database::get().create_session();
+            Statement select(session);
+            int count = 0;
+            
+            select << "SELECT COUNT(*) FROM `User` WHERE id = ?",
+                into(count),
+                use(id);
+            
+            select.execute();
+
+            if (count > 0)
+                return true;
+            else
+                return false;
+        }
+        catch (Poco::Data::MySQL::ConnectionException &e)
+        {
+            std::cout << "connection:" << e.what() << std::endl;
+            throw;
+        }
+        catch (Poco::Data::MySQL::StatementException &e)
+        {
+
+            std::cout << "statement:" << e.what() << std::endl;
+            throw;
+        }
+    }
+
     void User::save_to_mysql()
     {
 

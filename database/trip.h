@@ -13,7 +13,7 @@ namespace database
             long _id;
             long _route_ID;
             long _driver;
-            long _user;
+            //long _user;
             std::string _date_depart;
             std::string _travel_conditions;
             int _price;
@@ -26,7 +26,7 @@ namespace database
             long                get_id() const;
             long                get_route_ID() const;
             long                get_driver() const;
-            long                get_user() const;
+            //long                get_user() const;
             const std::string   &get_date_depart() const;
             const std::string   &get_travel_conditions() const;
             const int           &get_price() const;
@@ -35,7 +35,7 @@ namespace database
             long&         id();
             long         &route_ID();
             long         &driver();
-            long         &user();
+            //long         &user();
             std::string  &date_depart();
             std::string  &travel_conditions();
             int          &price();

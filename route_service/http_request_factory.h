@@ -58,7 +58,8 @@ public:
             hasSubstr(request.getURI(),"/read_all") ||
             hasSubstr(request.getURI(),"/search") ||
             hasSubstr(request.getURI(),"/routes/search_by_user") ||
-            hasSubstr(request.getURI(),"/routes_by_user")) 
+            hasSubstr(request.getURI(),"/routes_by_user")  ||
+            hasSubstr(request.getURI(),"/routes")) 
             return new RouteHandler(_format);
         return 0;
     }

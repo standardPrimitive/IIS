@@ -31,12 +31,12 @@ namespace database
             create_stmt << "CREATE TABLE IF NOT EXISTS `Trip` (`id` INT NOT NULL AUTO_INCREMENT,"
                         << "`route_ID` int(11) NOT NULL,"
                         << "`driver` int(11) NOT NULL,"
-                        << "`user` int(11) NOT NULL,"
+                       // << "`user` int(11) NOT NULL,"
                         << "`date_depart` VARCHAR(256) NOT NULL,"
                         << "`travel_conditions` VARCHAR(256) NULL,"
                         << "`price` int(5) NOT NULL,"
                         << "PRIMARY KEY (`id`),"
-                        << "FOREIGN KEY (`user`) REFERENCES `User` (`id`),"
+                        //<< "FOREIGN KEY (`user`) REFERENCES `User` (`id`),"
                         << "FOREIGN KEY (`route_ID`) REFERENCES `Route` (`id_route`));",  
             //-bdv
                 now;
@@ -63,7 +63,7 @@ namespace database
         root->set("id", _id);
         root->set("route_ID", _route_ID);
         root->set("driver", _driver);
-        root->set("user", _user);
+        //root->set("user", _user);
         root->set("date_depart", _date_depart);
         root->set("travel_conditions", _travel_conditions);
         root->set("price", _price);
@@ -81,7 +81,7 @@ namespace database
         Trip.id() = object->getValue<long>("id");
         Trip.route_ID() = object->getValue<long>("route_ID");
         Trip.driver() = object->getValue<long>("driver");
-        Trip.user() = object->getValue<long>("user");
+        //Trip.user() = object->getValue<long>("user");
         Trip.date_depart() = object->getValue<std::string>("date_depart");
         Trip.travel_conditions() = object->getValue<std::string>("travel_conditions");
         Trip.price() = object->getValue<int>("price");
@@ -96,11 +96,11 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement select(session);
             Trip a;
-            select << "SELECT id, route_ID, driver, user, date_depart, travel_conditions, price FROM Trip where id=?",
+            select << "SELECT id, route_ID, driver, date_depart, travel_conditions, price FROM Trip where id=?",
                 into(a._id),
                 into(a._route_ID),
                 into(a._driver),
-                into(a._user),
+                //into(a._user),
                 into(a._date_depart),
                 into(a._travel_conditions),
                 into(a._price),
@@ -133,11 +133,11 @@ namespace database
             Statement select(session);
             std::vector<Trip> result;
             Trip a;
-            select << "SELECT id, route_ID, driver, user, date_depart, travel_conditions, price FROM Trip",
+            select << "SELECT id, route_ID, driver, date_depart, travel_conditions, price FROM Trip",
                 into(a._id),
                 into(a._route_ID),
                 into(a._driver),
-                into(a._user),
+                //into(a._user),
                 into(a._date_depart),
                 into(a._travel_conditions),
                 into(a._price),
@@ -172,10 +172,10 @@ namespace database
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
             //+bdv
-            insert << "INSERT INTO Trip (route_ID,driver,user,date_depart,travel_conditions,price) VALUES(?, ?, ?, ?, ?, ?)",
+            insert << "INSERT INTO Trip (route_ID,driver,date_depart,travel_conditions,price) VALUES(?, ?, ?, ?, ?, ?)",
                 use(_route_ID),
                 use(_driver),
-                use(_user),
+                //use(_user),
                 use(_date_depart),
                 use(_travel_conditions),
                 use(_price);
@@ -260,10 +260,10 @@ namespace database
         return _driver;
     }
 
-    long Trip::get_user() const
-    {
-        return _user;
-    }
+    // long Trip::get_user() const
+    // {
+    //     return _user;
+    // }
 
     const std::string &Trip::get_date_depart() const
     {
@@ -295,10 +295,10 @@ namespace database
         return _driver;
     }
     
-    long &Trip::user()
-    {
-        return _user;
-    }
+    // long &Trip::user()
+    // {
+    //     return _user;
+    // }
 
     std::string &Trip::date_depart()
     {

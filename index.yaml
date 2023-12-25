@@ -183,18 +183,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error' 
   # ================================= ROUTE ========================================== # 
-  /route: # получение информации о маршруте
+  /routes: # получение информации о маршрутах пользователя
     get:
       servers:
         - url: http://localhost:8081
-      summary: Информации о маршруте
+      summary: Информации о маршрутах пользователя
       parameters:
-      - name: id_route
+      - name: id_user
         description: Идентификатор маршрута
         in: query
         required: true
         schema:
-          $ref: '#/components/schemas/route_ID'
+          $ref: '#/components/schemas/user_id'
       responses:
         200:
           description: Найденный маршрут
@@ -215,15 +215,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
+      servers:
+        - url: http://localhost:8081
       summary: Добавление нового маршрута # п.4 Создание маршрута
       parameters:
-      - name: route_ID
-        description: Идентификатор маршрута
-        in: query
-        required: true
-        schema:
-            $ref: '#/components/schemas/route_ID'
-      - name: user_id
+      # - name: id_route
+      #   description: Идентификатор маршрута
+      #   in: query
+      #   required: true
+      #   schema:
+      #       $ref: '#/components/schemas/id_route'
+      - name: id_user
         description: Идентификатор пользователя 
         in: query
         required: true
@@ -261,37 +263,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /routes/search_by_user: # получение маршрутов пользователя
-    parameters:
-    - name: user_id
-      description: Идентификатор пользователя
-      in: query
-      required: true
-      schema:
-        $ref: '#/components/schemas/user_id'
-    get:
-      servers:
-        - url: http://localhost:8081
-      summary: Получение маршрутов пользователя
-      responses:
-        200:
-          description: Список маршрутов конкретного пользователя
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/trips'
-        404:
-          description: Указанный пользователь не существует
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        500:
-          description: Неожиданная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+  # /routes/search_by_user: # получение маршрутов пользователя
+  #   parameters:
+  #   - name: user_id
+  #     description: Идентификатор пользователя
+  #     in: query
+  #     required: true
+  #     schema:
+  #       $ref: '#/components/schemas/user_id'
+  #   get:
+  #     servers:
+  #       - url: http://localhost:8081
+  #     summary: Получение маршрутов пользователя
+  #     responses:
+  #       200:
+  #         description: Список маршрутов конкретного пользователя
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/trips'
+  #       404:
+  #         description: Указанный пользователь не существует
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Error'
+  #       500:
+  #         description: Неожиданная ошибка
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Error'
 
 # ============================= COMPONENTS SCHEMAS ============================
 components:
@@ -299,7 +301,7 @@ components:
     user_id:
       description: Уникальный идентификатор пользователя
       type: integer
-    route_ID:
+    id_route:
       description: Уникальный идентификатор маршрута
       type: integer
     trip_id:
@@ -342,15 +344,15 @@ components:
     trip:
       type: object
       required:
-        - route_ID
+        - id_route
         - driver
         - user
         - date_depart
         - travel_conditions
         - price
       properties:
-        route_ID:
-          $ref: '#/components/schemas/route_ID'
+        id_route:
+          $ref: '#/components/schemas/id_route'
         driver:
           $ref: '#/components/schemas/user_id'
         user:
@@ -374,7 +376,7 @@ components:
         - point_end
       properties:
         id_route:
-          $ref: '#/components/schemas/route_ID'
+          $ref: '#/components/schemas/id_route'
         id_user:
           $ref: '#/components/schemas/user_id'
         point_start:

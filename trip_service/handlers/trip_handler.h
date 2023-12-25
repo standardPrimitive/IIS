@@ -64,6 +64,88 @@ static bool hasSubstr(const std::string &str, const std::string &substr)
 
 class TripHandler : public HTTPRequestHandler
 {
+// private:
+//     bool check_id_user(const std::string &id_user, std::string &reason)
+//     {
+//         if (id_user.find('\t') != std::string::npos)
+//         {
+//             reason = "User id can't contain character tabulation";
+//             return false;
+//         }
+//         if (id_user.find('\n') != std::string::npos)
+//         {
+//             reason = "User id can't contain character '\\n'";
+//             return false;
+//         }
+
+//         return true;
+//     };
+
+//     bool check_description(const std::string &description, std::string &reason)
+//     {
+//         if (description.find('\t') != std::string::npos)
+//         {
+//             reason = "description can't contain character tabulation";
+//             return false;
+//         }
+//         if (description.find('\n') != std::string::npos)
+//         {
+//             reason = "description can't contain character '\\n'";
+//             return false;
+//         }
+
+//         return true;
+//     };
+
+//     bool check_permission(const std::string &permission, std::string &reason)
+//     {
+//         if (permission != "true" || permission != "false")
+//         {
+//             std::ostringstream oss;
+//             oss << "Wrong record_permission identifier: " << permission << ".";
+//             reason = oss.str();
+//             return false;
+//         }
+
+//         return true;
+//     };
+
+//     bool check_author_id(const std::string &author_id, std::string &reason)
+//     {
+//         long id = atol(author_id.c_str());
+//         if (!database::User::check_user_exists_by_id(id))
+//         {
+//             std::ostringstream oss;
+//             oss << "User with id: " << author_id << "doesn't exist.";
+//             reason = oss.str();
+//             return false;
+//         }
+
+//         return true;
+//     };
+
+//     bool check_conference_id(const std::string &conference_id, std::string &reason)
+//     {
+//         long id = atol(conference_id.c_str());
+//         if (!database::Conference::check_conference_exists_by_id(id))
+//         {
+//             std::ostringstream oss;
+//             oss << "Conference with id: " << conference_id << "doesn't exist.";
+//             reason = oss.str();
+//             return false;
+//         }
+
+//         return true;
+//     };
+
+//     bool query_string_boolean_to_bool(const std::string &str) 
+//     {
+//         if (str == "true")
+//             return true;
+//         else
+//             return false;
+//     }
+
 public:
     TripHandler(const std::string &format) : _format(format)
     {
