@@ -57,7 +57,8 @@ public:
         if (hasSubstr(request.getURI(),"/read_by_id") ||
             hasSubstr(request.getURI(),"/read_all") ||
             hasSubstr(request.getURI(),"/search") ||
-            hasSubstr(request.getURI(),"/trip")) 
+            hasSubstr(request.getURI(),"/trip") ||
+            hasSubstr(request.getURI(),"/connect"))
             return new TripHandler(_format);
         return 0;
     }

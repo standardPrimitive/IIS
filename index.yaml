@@ -113,7 +113,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   # =========================================================================== # 
-  /user/search/fio: # поиск по фио
+  /user/search/fio: # поиск по фио (работает)
     get:
       servers:
         - url: http://localhost:8080
@@ -151,7 +151,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   # =========================================================================== # 
-  /user/search/login: # поиск по логину
+  /user/search/login: # поиск по логину (работает)
     get:
       servers:
         - url: http://localhost:8080
@@ -182,6 +182,136 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error' 
+  # ==============================TRIPS============================================= # 
+  /trips:
+    get: #п.8 получить инфу о поездке (работает)
+      servers:
+        - url: http://localhost:8082
+      summary: Получение информации о поездке
+      parameters:
+      - name: id
+        description: Идентификатор поездки
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/trip_id'
+      responses:
+        200:
+          description: Найденная поездка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trip'
+        404:
+          description: Поездка не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post: # п.6 Создание поездки (работает)
+      servers:
+        - url: http://localhost:8082
+      summary: Добавление новой поездки 
+      parameters:
+      - name: route_ID
+        description: Идентификатор маршрута
+        in: query
+        required: true
+        schema:
+            $ref: '#/components/schemas/id_route'
+      - name: driver
+        description: Идентификатор водителя 
+        in: query
+        required: true
+        schema:
+          type: integer  
+      # - name: user
+      #   description: Идентификатор пользователя 
+      #   in: query
+      #   required: true
+      #   schema:
+      #       $ref: '#/components/schemas/user_id'
+      - name: date_depart
+        description: Дата отправления 
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: travel_conditions
+        description: Пожелания к поездке 
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: price
+        description: Стоимость поездки 
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Идентификатор добавленной поездки
+          content:
+            application/json:
+              schema:
+                type: integer
+        404:
+          description: Ошибка добавления поездки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+
+  /connect:
+   post: # п.7 Подключение пользователя к поездке (в разработке)
+      servers:
+        - url: http://localhost:8082
+      summary: Подключение пользователя к поездке 
+      parameters:
+      - name: user_id
+        description: Идентификатор пользователя
+        in: query
+        required: true
+        schema:
+            $ref: '#/components/schemas/user_id'
+      - name: trip_id
+        description: Идентификатор поездки 
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/trip_id'   
+      responses:
+        '200':
+          description: Идентификатор добавленной поездки
+          content:
+            application/json:
+              schema:
+                type: integer
+        404:
+          description: Ошибка добавления поездки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
   # ================================= ROUTE ========================================== # 
   /routes: # получение информации о маршрутах пользователя
     get:
@@ -201,7 +331,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/trip'
+                $ref: '#/components/schemas/route'
         404:
           description: Маршрут не найден
           content:
@@ -214,10 +344,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    post:
+    post: # п.4 Создание маршрута
       servers:
         - url: http://localhost:8081
-      summary: Добавление нового маршрута # п.4 Создание маршрута
+      summary: Добавление нового маршрута
       parameters:
       # - name: id_route
       #   description: Идентификатор маршрута
@@ -262,38 +392,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
-  # /routes/search_by_user: # получение маршрутов пользователя
-  #   parameters:
-  #   - name: user_id
-  #     description: Идентификатор пользователя
-  #     in: query
-  #     required: true
-  #     schema:
-  #       $ref: '#/components/schemas/user_id'
-  #   get:
-  #     servers:
-  #       - url: http://localhost:8081
-  #     summary: Получение маршрутов пользователя
-  #     responses:
-  #       200:
-  #         description: Список маршрутов конкретного пользователя
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/trips'
-  #       404:
-  #         description: Указанный пользователь не существует
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/Error'
-  #       500:
-  #         description: Неожиданная ошибка
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/Error'
 
 # ============================= COMPONENTS SCHEMAS ============================
 components:

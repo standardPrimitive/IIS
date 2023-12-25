@@ -27,7 +27,7 @@ namespace database
             
             Poco::Data::Session session = database::Database::get().create_session();
             Statement create_stmt(session);
-            //+bdv
+
             create_stmt << "CREATE TABLE IF NOT EXISTS `Trip` (`id` INT NOT NULL AUTO_INCREMENT,"
                         << "`route_ID` int(11) NOT NULL,"
                         << "`driver` int(11) NOT NULL,"
@@ -38,7 +38,7 @@ namespace database
                         << "PRIMARY KEY (`id`),"
                         //<< "FOREIGN KEY (`user`) REFERENCES `User` (`id`),"
                         << "FOREIGN KEY (`route_ID`) REFERENCES `Route` (`id_route`));",  
-            //-bdv
+
                 now;
 
         }
@@ -59,7 +59,7 @@ namespace database
     Poco::JSON::Object::Ptr Trip::toJSON() const
     {
         Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
-        //+bdv
+
         root->set("id", _id);
         root->set("route_ID", _route_ID);
         root->set("driver", _driver);
@@ -67,7 +67,6 @@ namespace database
         root->set("date_depart", _date_depart);
         root->set("travel_conditions", _travel_conditions);
         root->set("price", _price);
-        //-bdv
         return root;
     }
 
@@ -77,7 +76,7 @@ namespace database
         Poco::JSON::Parser parser;
         Poco::Dynamic::Var result = parser.parse(str);
         Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
-        //+bdv
+
         Trip.id() = object->getValue<long>("id");
         Trip.route_ID() = object->getValue<long>("route_ID");
         Trip.driver() = object->getValue<long>("driver");
@@ -85,7 +84,7 @@ namespace database
         Trip.date_depart() = object->getValue<std::string>("date_depart");
         Trip.travel_conditions() = object->getValue<std::string>("travel_conditions");
         Trip.price() = object->getValue<int>("price");
-        //-bdv
+        //-
         return Trip;
     }
 
@@ -171,15 +170,15 @@ namespace database
         {
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
-            //+bdv
-            insert << "INSERT INTO Trip (route_ID,driver,date_depart,travel_conditions,price) VALUES(?, ?, ?, ?, ?, ?)",
+            //+
+            insert << "INSERT INTO Trip (route_ID,driver,date_depart,travel_conditions,price) VALUES(?, ?, ?, ?, ?)",
                 use(_route_ID),
                 use(_driver),
                 //use(_user),
                 use(_date_depart),
                 use(_travel_conditions),
                 use(_price);
-            //-bdv
+            //-
             insert.execute();
             Poco::Data::Statement select(session);
             select << "SELECT LAST_INSERT_ID()",
@@ -204,6 +203,41 @@ namespace database
         }
     }
 
+    void Trip::connect_user_to_trip()
+    {
+        try
+        {
+            Poco::Data::Session session = database::Database::get().create_session();
+            Poco::Data::Statement insert(session);
+            //+
+            insert << "INSERT INTO user_trip (user_id, trip_id) VALUES(?, ?)",
+                use(_user_id),
+                use(_trip_id);
+            //-
+            insert.execute();
+            Poco::Data::Statement select(session);
+            select << "SELECT LAST_INSERT_ID()",
+                into(_id),
+                range(0, 1); //  iterate over result set one row at a time
+
+            if (!select.done())
+            {
+                select.execute();
+            }
+            std::cout << "inserted succesfully" << std::endl;
+        }
+        catch (Poco::Data::MySQL::ConnectionException &e)
+        {
+            std::cout << "connection:" << e.what() << std::endl;
+            throw;
+        }
+        catch (Poco::Data::MySQL::StatementException &e)
+        {
+            std::cout << "statement:" << e.what() << std::endl;
+            throw;
+        }      
+    }
+
     // std::vector<Trip> Trip::search_route(std::string login)
     // {
     //     try
@@ -212,7 +246,7 @@ namespace database
     //         Statement select(session);
     //         std::vector<Trip> result;
     //         Trip a;
-    //         //+bdv
+    //         //+
     //         select << "SELECT Route.id, route_ID, driver, user, date_depart, travel_conditions, price FROM Trip INNER JOIN Route ON Trip.route_ID=Route.id GROUP BY Route.id",
     //             into(a._id),
     //             into(a._route_ID),
@@ -223,7 +257,7 @@ namespace database
     //             into(a._price),
     //             use(login),
     //             range(0, 1); //  iterate over result set one row at a time
-    //         //-bdv
+    //         //-
     //         while (!select.done())
     //         {
     //             if (select.execute())
@@ -244,7 +278,7 @@ namespace database
     //         throw;
     //     }
     // }
-    //+bdv
+    //+
     long Trip::get_id() const
     {
         return _id;
@@ -278,6 +312,16 @@ namespace database
     const int &Trip::get_price() const
     {
         return _price;
+    }
+
+    const int &Trip::get_user_id() const
+    {
+        return _user_id;
+    }
+
+    const int &Trip::get_trip_id() const
+    {
+        return _trip_id;
     }
 
     long &Trip::id()
@@ -314,6 +358,13 @@ namespace database
     {
         return _price;
     }
-    //-bdv
-
+    int &Trip::user_id()
+    {
+        return _user_id;
+    }
+    int &Trip::trip_id()
+    {
+        return _trip_id;
+    }
+    //-
 }

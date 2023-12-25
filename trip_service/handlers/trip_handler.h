@@ -158,9 +158,9 @@ public:
         try
         {
 
-            if (form.has("trip_id") && hasSubstr(request.getURI(), "/read_by_id"))
+            if (form.has("id") && hasSubstr(request.getURI(), "/trips")) // п.8 Получение информации о поездке
             {
-                long id = atol(form.get("trip_id").c_str());
+                long id = atol(form.get("id").c_str());
                 std::optional<database::Trip> result = database::Trip::read_by_id(id);
                 if (result)
                 {
@@ -187,7 +187,7 @@ public:
                     return;
                 }
             }
-            else if (hasSubstr(request.getURI(), "/read_all"))
+            else if (hasSubstr(request.getURI(), "/read_all")) // получить все
             {
                 auto results = database::Trip::read_all();
                 Poco::JSON::Array arr;
@@ -200,18 +200,34 @@ public:
                 Poco::JSON::Stringifier::stringify(arr, ostr);
                 return;
             }
-            else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
+            else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST && hasSubstr(request.getURI(), "/trips")) // п.6 Добавить поездку
             {
-                if (form.has("route_ID") && form.has("driver") && form.has("user") && form.has("date_depart") && form.has("travel_conditions") && form.has("price"))
+                if (form.has("route_ID") && form.has("driver") && form.has("date_depart") && form.has("travel_conditions") && form.has("price"))
                 {
                     database::Trip trip;
                     trip.route_ID() = stof(form.get("route_ID"));
                     trip.driver() = stof(form.get("driver"));
-                    trip.user() = stof(form.get("user"));
-                    trip.date_depart() = stof(form.get("date_depart"));
-                    trip.travel_conditions() = stof(form.get("travel_conditions"));
+                   // trip.user() = stof(form.get("user"));
+                    trip.date_depart() = form.get("date_depart");
+                    trip.travel_conditions() = form.get("travel_conditions");
                     trip.price() = stof(form.get("price"));
                     trip.save_to_mysql();
+                    response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
+                    response.setChunkedTransferEncoding(true);
+                    response.setContentType("application/json");
+                    std::ostream &ostr = response.send();
+                    ostr << trip.get_id();
+                    return;
+                }
+            }
+            else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST && hasSubstr(request.getURI(), "/connect")) // п.7 Подключение пользователя к поездке (в разработке)
+            {
+                if (form.has("user_id") && form.has("trip_id"))
+                {
+                    database::Trip trip;
+                    trip.user_id() = stof(form.get("user_id"));
+                    trip.trip_id() = stof(form.get("trip_id"));
+                    trip.connect_user_to_trip();
                     response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
                     response.setChunkedTransferEncoding(true);
                     response.setContentType("application/json");
